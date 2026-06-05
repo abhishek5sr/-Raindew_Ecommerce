@@ -44,7 +44,7 @@ function BannerManagement() {
   };
 
   return (
-    <div>
+    <div className="card">
       <h1>Banner Management</h1>
       <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" />
       <input type="file" onChange={(e) => setFile(e.target.files[0])} />

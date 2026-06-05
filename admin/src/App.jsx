@@ -1,45 +1,32 @@
-import { useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
 import BannerManagement from "./pages/banners";
 import CategoryManagement from "./pages/categorys";
 import ProductManagement from "./pages/products";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Link,
-  BrowserRouter,
-} from "react-router-dom";
+
 function App() {
   return (
-    <>
-      <div id="app-container">
-        <BrowserRouter>
+    <Router>
+      <div className="admin-layout">
+        <aside className="sidebar">
+          <h2> Dashboard</h2>
           <nav>
-            <Link to="/">Dashboard</Link>|
-            <Link to="/pages/banners">Manage Banner</Link>|
-            <Link to="/pages/categorys">Manage Category</Link>|
-            <Link to="/pages/products">Manage Product</Link>
+            <Link to="/">Dashboard</Link>
+            <Link to="/banners">Manage Banners</Link>
+            <Link to="/categorys">Manage Categories</Link>
+            <Link to="/products">Manage Products</Link>
           </nav>
-
+        </aside>
+        <main className="content">
           <Routes>
-            <Route path="/" element={<h1>Dashboard Component</h1>} />
-            <Route path="/pages/banners" element={<BannerManagement />} />
-            <Route path="/pages/categorys" element={<CategoryManagement />} />
-            <Route path="/pages/products" element={<ProductManagement />} />
+            <Route path="/" element={<h1>Welcome Admin</h1>} />
+            <Route path="/banners" element={<BannerManagement />} />
+            <Route path="/categorys" element={<CategoryManagement />} />
+            <Route path="/products" element={<ProductManagement />} />
           </Routes>
-        </BrowserRouter>
+        </main>
       </div>
-    </>
+    </Router>
   );
 }
-
-function Dashboard() {
-  return (
-    <>
-      <h1>Dashboard</h1>
-    </>
-  );
-}
-
 export default App;

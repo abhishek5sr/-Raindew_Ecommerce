@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 function ProductManagement() {
   const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]); // Added to store category list
+  const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -12,7 +12,6 @@ function ProductManagement() {
   const [files, setFiles] = useState([]);
   const [editId, setEditId] = useState(null);
 
-  // Fetch Products and Categories
   const fetchData = async () => {
     const prodRes = await fetch("http://localhost:3000/Product/list");
     const prodData = await prodRes.json();
@@ -46,7 +45,7 @@ function ProductManagement() {
   };
 
   return (
-    <div>
+    <div className="card">
       <h1>Product Management</h1>
       <input
         type="text"
@@ -69,7 +68,6 @@ function ProductManagement() {
         onChange={(e) => setFormData({ ...formData, price: e.target.value })}
       />
 
-      {/* Category Selection Dropdown */}
       <select
         value={formData.category}
         onChange={(e) => setFormData({ ...formData, category: e.target.value })}

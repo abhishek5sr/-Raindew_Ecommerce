@@ -14,14 +14,16 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-//add category
+// Add category
 CategoryRouter.post("/add", upload.single("image"), async (req, res) => {
   try {
     const { name, slug } = req.body;
-    const image_url = req.file ? `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}` : null;
+    const image_url = req.file
+      ? `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
+      : null;
     await CategoryModel.create({
       name: name,
-      image_url: image_url
+      image_url: image_url,
     });
     res.json({ message: "Category created successfully" });
   } catch (error) {
@@ -29,57 +31,71 @@ CategoryRouter.post("/add", upload.single("image"), async (req, res) => {
   }
 });
 
-//edit category
-CategoryRouter.put("/edit/:id", upload.single("image"), async(req,res)=>{
-  try{
-      const {id}=req.params;
-      const {name , slug} = req.body;
-      const image_url = req.file ? `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}` : undefined;
-      
-      const updateData = { name, slug };
-      if (image_url) updateData.image_url = image_url;
+// Edit category
+CategoryRouter.put("/edit/:id", upload.single("image"), async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, slug } = req.body;
+    const image_url = req.file
+      ? `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
+      : undefined;
 
-      const updateCategory =  await CategoryModel.findByIdAndUpdate(
-        id,
-        updateData,
-        {new:true},
-      );
+    const updateData = { name, slug };
+    if (image_url) updateData.image_url = image_url;
 
-      if(!updateCategory){
-        res.status(404).json({message:"category not found"})
-      }
-      else{res.json({message:"category updated",data : updateCategory})}
-}
-catch(error){
-   res.status(500).json({ message: "internal server error" });
-}
+    const updateCategory = await CategoryModel.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true },
+    );
+
+    if (!updateCategory) {
+      res.status(404).json({ message: "category not found" });
+    } else {
+      res.json({ message: "category updated", data: updateCategory });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "internal server error" });
+  }
 });
 
-// delete category
-CategoryRouter.delete("/delete/:id",async(req,res)=>{
-  try{
-      const {id}=req.params;
-      const deleteCategory =  await CategoryModel.findByIdAndDelete(id);
+// Delete category
+CategoryRouter.delete("/delete/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleteCategory = await CategoryModel.findByIdAndDelete(id);
 
-      if(!deleteCategory){
-        res.status(404).json({message:"category not found"})
-      }
-      else{res.json({message:"category deleted"})}
-}
-catch(error){
-   res.status(500).json({ message: "internal server error" });
-}
+    if (!deleteCategory) {
+      res.status(404).json({ message: "category not found" });
+    } else {
+      res.json({ message: "category deleted" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "internal server error" });
+  }
 });
 
-//list category
-CategoryRouter.get("/list", async(req,res)=>{
-  try{
+// List all categories
+CategoryRouter.get("/list", async (req, res) => {
+  try {
     const Categorylist = await CategoryModel.find({});
-    res.json({Categorylist});
-  }
-  catch(error){
-    res.status(500).json({message:"internal server error"});
+    res.json({ Categorylist });
+  } catch (error) {
+    res.status(500).json({ message: "internal server error" });
   }
 });
 
-module.exports = {CategoryRouter:CategoryRouter};
+// GET /Category/list/grocery
+CategoryRouter.get("/list/:name", async (req, res) => {
+  try {
+    const { name } = req.params;
+    const Categorylist = await CategoryModel.find({
+      name: { $regex: new RegExp(name, "i") },
+    });
+    res.json({ Categorylist });
+  } catch (error) {
+    res.status(500).json({ message: "internal server error" });
+  }
+});
+
+module.exports = { CategoryRouter: CategoryRouter };

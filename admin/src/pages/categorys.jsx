@@ -44,7 +44,7 @@ function CategoryManagement() {
   };
 
   return (
-    <div>
+    <div className="card">
       <h1>Category Management</h1>
       <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" />
       <input type="file" onChange={(e) => setFile(e.target.files[0])} />
